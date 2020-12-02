@@ -10,5 +10,6 @@ module.exports = {
     "import/order": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
+    "no-restricted-syntax": "off",
   },
 };
