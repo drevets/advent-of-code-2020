@@ -11,5 +11,7 @@ module.exports = {
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "no-restricted-syntax": "off",
+    "max-classes-per-file": "off",
+    "class-methods-use-this": "off",
   },
 };
