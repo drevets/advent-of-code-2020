@@ -66,7 +66,13 @@ Approach:
   * throws if there isn't a required field but continues processing the batch
 */
 
-import { findAnswerPartOne, ProcessBatch, ProcessPassports } from ".";
+import {
+  findAnswerPartOne,
+  findAnswerPartTwo,
+  ProcessBatch,
+  ProcessPassports,
+  Validator,
+} from ".";
 
 const testInput = `ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
@@ -127,7 +133,8 @@ describe("ProcessPassports", () => {
     const passportProcessor = new ProcessPassports(samplePassports);
     expect(
       passportProcessor.passportCreate(
-        "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd byr:1937 iyr:2017 cid:147 hgt:183cm"
+        "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd byr:1937 iyr:2017 cid:147 hgt:183cm",
+        false
       )
     ).toStrictEqual({
       ecl: "gry",
@@ -144,8 +151,80 @@ describe("ProcessPassports", () => {
     const passportProcessor = new ProcessPassports(samplePassports);
     expect(
       passportProcessor.passportCreate(
-        "ecl:gry eyr:2020 hcl:#fffffd byr:1937 iyr:2017 cid:147 hgt:183cm"
+        "ecl:gry eyr:2020 hcl:#fffffd byr:1937 iyr:2017 cid:147 hgt:183cm",
+        false
       )
     ).toBeUndefined();
+  });
+});
+
+describe("Validator", () => {
+  const validor = new Validator();
+  it("can say if a birthyear is valid or not", () => {
+    expect(validor.byr("1919")).toBe(false);
+    expect(validor.byr("1920")).toBe(true);
+    expect(validor.byr("2002")).toBe(true);
+    expect(validor.byr("2003")).toBe(false);
+  });
+  it("can say if a issue date is valid or not", () => {
+    expect(validor.eyr("2020")).toBe(true);
+    expect(validor.eyr("2019")).toBe(false);
+    expect(validor.eyr("2030")).toBe(true);
+    expect(validor.eyr("2031")).toBe(false);
+  });
+  it("can say if a height is valid or not", () => {
+    expect(validor.hgt("200cm")).toBe(false);
+    expect(validor.hgt("150cm")).toBe(true);
+    expect(validor.hgt("59in")).toBe(true);
+    expect(validor.hgt("100in")).toBe(false);
+    expect(validor.hgt("100")).toBe(false);
+  });
+  it("can say if a hair color is valid or not", () => {
+    expect(validor.hcl("#123abc")).toBe(true);
+    expect(validor.hcl("#123abz")).toBe(false);
+    expect(validor.hcl("123abc")).toBe(false);
+  });
+  it("can say if an eye color is valid or not", () => {
+    expect(validor.ecl("brn")).toBe(true);
+    expect(validor.ecl("wat")).toBe(false);
+  });
+  it("can say if a pid is valid or not", () => {
+    expect(validor.pid("000000001")).toBe(true);
+    expect(validor.pid("0123456789")).toBe(false);
+  });
+});
+
+describe("findAnswerPartTWo", () => {
+  it("shouild get one example right", () => {
+    expect(
+      findAnswerPartTwo(`eyr:1972 cid:100
+    hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926`)
+    ).toBe(0);
+  });
+  it("shouild get another example right", () => {
+    expect(
+      findAnswerPartTwo(`iyr:2019
+      hcl:#602927 eyr:1967 hgt:170cm
+      ecl:grn pid:012533040 byr:1946`)
+    ).toBe(0);
+  });
+  it("shouild get a third example right", () => {
+    expect(
+      findAnswerPartTwo(`hcl:dab227 iyr:2012
+      ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277`)
+    ).toBe(0);
+  });
+  it("shouild get a fourth example right", () => {
+    expect(
+      findAnswerPartTwo(`hgt:59cm ecl:zzz
+      eyr:2038 hcl:74454a iyr:2023
+      pid:3556412378 byr:2007`)
+    ).toBe(0);
+  });
+  it("shouild get a fifth example right", () => {
+    expect(
+      findAnswerPartTwo(`pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
+      hcl:#623a2f`)
+    ).toBe(1);
   });
 });
