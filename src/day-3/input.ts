@@ -1,4 +1,4 @@
-const puzzleInput = [
+const puzzleInputDayTwo = [
   "...#....#.#...##......#.#...##.",
   ".#..#...##..#....##........##..",
   "..##.##...##.#.#....#..#......#",
@@ -324,4 +324,4 @@ const puzzleInput = [
   "#.#.#..#..#.#..#...###.#.#....#",
 ];
 
-export default puzzleInput;
+export default puzzleInputDayTwo;
