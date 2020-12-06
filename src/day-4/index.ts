@@ -95,15 +95,12 @@ export class ProcessBatch {
 }
 
 export class ProcessPassports {
-  private shouldValidate: boolean;
-
   private passports: { [index: string]: string }[];
 
   private requiredKeys = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
 
   constructor(input: string[], shouldValidate = false) {
     this.passports = this.processPassports(input, shouldValidate);
-    this.shouldValidate = shouldValidate;
   }
 
   checkRequiredKeys(
