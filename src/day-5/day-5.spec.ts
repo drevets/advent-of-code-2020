@@ -32,17 +32,3 @@ describe("findMySeat", () => {
     expect(findMySeat(new Set([5, 8, 10]), 10)).toStrictEqual(9);
   });
 });
-
-/* part two:
-// some of the seats at the very back and very front of the plane aren't there
-// I want to find the missing one that also has valid values on either side
-
-
-[4,5,6,8,9,10]
-[3,10,13,14,16]
-// current is 14
-// next is 16
-// shouldBeNext = 15
-
-
-*/

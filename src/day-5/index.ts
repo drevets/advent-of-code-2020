@@ -59,4 +59,4 @@ export const findAnswerPartTwo = (input: string[]): number => {
 };
 
 // my OG answer: 624, but it's too low!!!
-console.log("ANSWER??", findAnswerPartTwo(puzzleInputDayFive));
+// console.log("ANSWER??", findAnswerPartTwo(puzzleInputDayFive));
