@@ -43,7 +43,7 @@ return true or false for whether superbag has shiny gold somewhere in its traver
 import puzzleInputDaySeven from "./input";
 
 export class RuleSet {
-  nodes: { [index: string]: string[] };
+  nodes: { [index: string]: { color: string; quantity: number }[] };
 
   constructor(input: string[]) {
     const rules = input.map((rule) => this.makeRule(rule));
@@ -55,7 +55,7 @@ export class RuleSet {
   }
 
   bagContains(superbagName: string, childbagName: string): boolean {
-    const nodeChildren = this.nodes[superbagName];
+    const nodeChildren = this.nodes[superbagName].map((bag) => bag.color);
     if (!nodeChildren.length) {
       return false;
     }
@@ -72,7 +72,25 @@ export class RuleSet {
     return false;
   }
 
-  makeRule(input: string): { [index: string]: string[] } {
+  containsBags(superbagName: string): number {
+    const childBags = this.nodes[superbagName];
+    let totalBags = 0;
+    if (!childBags.length) {
+      return totalBags;
+    }
+    for (let i = 0; i < childBags.length; i += 1) {
+      const childBag = childBags[i];
+      totalBags += childBag.quantity;
+      for (let j = 0; j < childBag.quantity; j += 1) {
+        totalBags += this.containsBags(childBag.color);
+      }
+    }
+    return totalBags;
+  }
+
+  makeRule(
+    input: string
+  ): { [index: string]: { color: string; quantity: number }[] } {
     const superbagColor = this.getSuperbagColor(input);
     if (this.hasNoChildren(input)) {
       return { [superbagColor]: [] };
@@ -90,18 +108,21 @@ export class RuleSet {
     return input.includes("contain no other bags");
   }
 
-  private makeChilds(input: string): string[] {
+  private makeChilds(input: string): { color: string; quantity: number }[] {
     const [first, rest] = input.split("contain");
     const childrenBagColors = rest.split(",");
     return childrenBagColors.map((bag) => {
-      return this.findColor(bag);
+      return this.findColorAndQuantity(bag);
     });
   }
 
-  private findColor(input: string): string {
+  private findColorAndQuantity(
+    input: string
+  ): { color: string; quantity: number } {
     const [numberAndColor, rest] = input.split("bag");
     const [number, adj, color] = numberAndColor.trim().split(" ");
-    return `${adj} ${color}`;
+    const fullColor = `${adj} ${color}`;
+    return { color: fullColor, quantity: parseInt(number, 10) };
   }
 }
 
@@ -111,4 +132,9 @@ export const findAnswerDaySeven = (input: string[]): number => {
   return bags
     .map((bag) => rules.bagContains(bag, "shiny gold"))
     .filter((b) => b).length;
+};
+
+export const findAnswerDaySevenPartTwo = (input: string[]): number => {
+  const rules = new RuleSet(input);
+  return rules.containsBags("shiny gold");
 };
