@@ -45,6 +45,8 @@ going back and forth between 20 intermediates. Something is wrong with my rulezz
 
 */
 
+import puzzleInputDay11 from "./input";
+
 export class Seater {
   private initialSeats: string[];
 
@@ -93,18 +95,14 @@ export class Seater {
 
   seatSeats(): number {
     const didSeatsChange = this.seat();
-    // console.log("didSeatschnage", didSeatsChange);
     if (!didSeatsChange) {
-      // console.log("seats did not change", didSeatsChange);
       return this.getCurrentlySeatedCount();
     }
-    // console.log("calling seat again");
     this.seatSeats();
   }
 
   seat(): boolean {
     const occupiedSeatCountBefore = this.getCurrentlySeatedCount();
-    console.log("occupiedSeatCountBefore", occupiedSeatCountBefore);
     const newSeatArrangement = this.currentSeats.map((row, yValue, allSeats) =>
       this.seatRow(row, yValue, allSeats)
     );
@@ -147,7 +145,12 @@ export class Seater {
     if (adjacentFilledSeats >= 4) {
       return "L";
     }
-    return "#";
+
+    if (seat === "L" && adjacentFilledSeats === 0) {
+      return "#";
+    }
+
+    return seat;
   }
 
   findIndicesToCheck = (
@@ -180,6 +183,8 @@ export class Seater {
 
 export const day11Part1 = (input: string[]): number => {
   const seater = new Seater(input);
-  const numOccupied = seater.seatSeats();
-  return numOccupied;
+  seater.seatSeats();
+  return seater.getCurrentlySeatedCount();
 };
+
+// console.log("ANSWER???", day11Part1(puzzleInputDay11));

@@ -1,7 +1,7 @@
 import { day11Part1, Seater } from ".";
 
 describe("day11Part1", () => {
-  xit("finds the right answer", () => {
+  it("finds the right answer", () => {
     const input = [
       "L.LL.LL.LL",
       "LLLLLLL.LL",
@@ -16,6 +16,97 @@ describe("day11Part1", () => {
     ];
 
     expect(day11Part1(input)).toBe(37);
+  });
+  it("can find the right arrangment after oen seating", () => {
+    const initial = [
+      "L.LL.LL.LL",
+      "LLLLLLL.LL",
+      "L.L.L..L..",
+      "LLLL.LL.LL",
+      "L.LL.LL.LL",
+      "L.LLLLL.LL",
+      "..L.L.....",
+      "LLLLLLLLLL",
+      "L.LLLLLL.L",
+      "L.LLLLL.LL",
+    ];
+    const afterFirst = [
+      "#.##.##.##",
+      "#######.##",
+      "#.#.#..#..",
+      "####.##.##",
+      "#.##.##.##",
+      "#.#####.##",
+      "..#.#.....",
+      "##########",
+      "#.######.#",
+      "#.#####.##",
+    ];
+
+    const afterSecond = [
+      "#.LL.L#.##",
+      "#LLLLLL.L#",
+      "L.L.L..L..",
+      "#LLL.LL.L#",
+      "#.LL.LL.LL",
+      "#.LLLL#.##",
+      "..L.L.....",
+      "#LLLLLLLL#",
+      "#.LLLLLL.L",
+      "#.#LLLL.##",
+    ];
+
+    const afterThird = [
+      "#.##.L#.##",
+      "#L###LL.L#",
+      "L.#.#..#..",
+      "#L##.##.L#",
+      "#.##.LL.LL",
+      "#.###L#.##",
+      "..#.#.....",
+      "#L######L#",
+      "#.LL###L.L",
+      "#.#L###.##",
+    ];
+    const seater = new Seater(initial);
+    seater.seat();
+    expect(seater.getCurrentSeats()).toStrictEqual(afterFirst);
+    seater.seat();
+    expect(seater.getCurrentSeats()).toStrictEqual(afterSecond);
+    seater.seat();
+    expect(seater.getCurrentSeats()).toStrictEqual(afterThird);
+  });
+});
+
+describe("problem input", () => {
+  it("can show me where the bug is", () => {
+    const afterSecond = [
+      "#.LL.L#.##",
+      "#LLLLLL.L#",
+      "L.L.L..L..",
+      "#LLL.LL.L#",
+      "#.LL.LL.LL",
+      "#.LLLL#.##",
+      "..L.L.....",
+      "#LLLLLLLL#",
+      "#.LLLLLL.L",
+      "#.#LLLL.##",
+    ];
+    const afterThird = [
+      "#.##.L#.##",
+      "#L###LL.L#",
+      "L.#.#..#..",
+      "#L##.##.L#",
+      "#.##.LL.LL",
+      "#.###L#.##",
+      "..#.#.....",
+      "#L######L#",
+      "#.LL###L.L",
+      "#.#L###.##",
+    ];
+    const seater = new Seater(afterSecond);
+    seater.seat();
+    expect(seater.getCurrentSeats()).toStrictEqual(afterThird);
   });
 });
 
