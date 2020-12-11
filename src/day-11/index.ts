@@ -41,6 +41,8 @@ if the seat is empty and there are no occupied seats adjacent to it, the seat be
 
 if a seat is occupied and four or more seats adjacent to it are also occupied, the seat becomes empty
 
+going back and forth between 20 intermediates. Something is wrong with my rulezzzzz enforcement. Chould check intermediate states ....
+
 */
 
 export class Seater {
@@ -89,8 +91,20 @@ export class Seater {
     }, 0);
   }
 
-  seat(): void {
+  seatSeats(): number {
+    const didSeatsChange = this.seat();
+    // console.log("didSeatschnage", didSeatsChange);
+    if (!didSeatsChange) {
+      // console.log("seats did not change", didSeatsChange);
+      return this.getCurrentlySeatedCount();
+    }
+    // console.log("calling seat again");
+    this.seatSeats();
+  }
+
+  seat(): boolean {
     const occupiedSeatCountBefore = this.getCurrentlySeatedCount();
+    console.log("occupiedSeatCountBefore", occupiedSeatCountBefore);
     const newSeatArrangement = this.currentSeats.map((row, yValue, allSeats) =>
       this.seatRow(row, yValue, allSeats)
     );
@@ -100,6 +114,7 @@ export class Seater {
     this.setDidSeatCountChange(
       occupiedSeatCountBefore !== occupiedSeatCountAfter
     );
+    return occupiedSeatCountBefore !== occupiedSeatCountAfter;
   }
 
   seatRow(row: string, yValue: number, allSeats: string[]): string {
@@ -124,7 +139,7 @@ export class Seater {
 
     for (const coords of indicesToCheck) {
       const [x, y] = coords;
-      if (allSeats[x][y] === "#") {
+      if (allSeats[y][x] === "#") {
         adjacentFilledSeats += 1;
       }
     }
@@ -164,5 +179,7 @@ export class Seater {
 }
 
 export const day11Part1 = (input: string[]): number => {
-  return 0;
+  const seater = new Seater(input);
+  const numOccupied = seater.seatSeats();
+  return numOccupied;
 };
