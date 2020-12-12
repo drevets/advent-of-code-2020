@@ -188,3 +188,17 @@ export const day11Part1 = (input: string[]): number => {
 };
 
 // console.log("ANSWER???", day11Part1(puzzleInputDay11));
+
+/*
+[x, y]
+
+so, all:
+
+n is distance to nearest seat
+
+[x - n, y - n] [x, y - n] [x + n, y - n]
+[x - n, y] [x, y] [ x + n, y]
+[x - n, y + n] [x, y + n] [x + n, y + n]
+
+
+*/
